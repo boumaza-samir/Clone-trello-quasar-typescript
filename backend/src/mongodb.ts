@@ -1,0 +1,13 @@
+import { MongoClient } from 'mongodb';
+import { Application } from './declarations';
+
+export default function (app: Application): void {
+  const connection = app.get('mongodb');
+  const database = connection.substr(connection.lastIndexOf('/') + 1);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const mongoClient = MongoClient.connect(connection, { useNewUrlParser: true })
+    .then(client => client.db(database));
+
+  app.set('mongoClient', mongoClient);
+}
